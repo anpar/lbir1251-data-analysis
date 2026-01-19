@@ -1,0 +1,35 @@
+date,heure,rang_f,état_f,pos_f,face_f,cond,PAR,remarque
+09/01/2026,10:53,3-4,Jeune,Milieu,Adaxiale,54,"53,95",test
+09/01/2026,11:01,3-4,Jeune,Milieu,Adaxiale,"54,02",,
+09/01/2026,11:03,3-4,Bien développée,Milieu,Adaxiale,5,5,Test Dihlan
+09/01/2026,11:03,5-6,Jeune,Milieu,Abaxiale,54,54,testdidi
+09/01/2026,11:09,5-6,Jeune,Milieu,Adaxiale,25,45,
+09/01/2026,11:50,5-6,Jeune,Base,Abaxiale,554,45,
+09/01/2026,11:50,3-4,Jeune,Milieu,Adaxiale,54,54,
+09/01/2026,11:50,1-2,Jeune,Base,Abaxiale,54,54,
+09/01/2026,11:50,1-2,Bien développée,Base,Abaxiale,1,1,
+09/01/2026,11:51,1-2,Bien développée,Base,Abaxiale,1,,
+09/01/2026,11:51,1-2,Bien développée,Base,Abaxiale,1,,
+09/01/2026,11:51,19-20,Jeune,Base,Abaxiale,0,0,
+09/01/2026,14:13,5-6,Jeune,Milieu,Abaxiale,54,,
+07/01/2026,16:20,13-14,Jeune,Milieu,Abaxiale,2,500,
+09/01/2026,16:20,13-14,Jeune,Milieu,Abaxiale,36,2555,Nicob
+09/01/2026,16:20,1-2,Vieille,Milieu,Abaxiale,25,25,Dilhan
+10/01/2026,19:43,5-6,Jeune,Milieu,Adaxiale,25,25,Toto
+13/01/2026,11:37,3-4,Jeune,Milieu,Abaxiale,12,45,
+14/01/2026,12:54,5-6,Jeune,Milieu,Adaxiale,125,125,Antoine 
+14/01/2026,12:56,13-14,Jeune,Milieu,Abaxiale,4999,513998,bajjenbxiiq
+14/01/2026,12:56,11-12,Jeune,Milieu,Adaxiale,25,25,Dilhan
+14/01/2026,12:57,5-6,Jeune,Milieu,Abaxiale,"0,5698888889","2,11",Nicooo
+14/01/2026,12:57,3-4,Jeune,Milieu,Adaxiale,1,1,hqhhabvb
+14/01/2026,12:57,13-14,Vieille,Milieu,Abaxiale,6,1,cqu
+14/01/2026,12:58,13-14,Vieille,Milieu,Adaxiale,28,35,antoine 2
+14/01/2026,12:58,15-16,Jeune,Pointe,Adaxiale,6,5,prour
+14/01/2026,12:59,13-14,Vieille,Pointe,Adaxiale,23,127,Nicoooô1
+14/01/2026,13:02,13-14,Bien développée,Milieu,Abaxiale,30,256,Nico3
+14/01/2026,14:39,1-2,Jeune,Base,Abaxiale,24,24,test
+14/01/2026,14:39,1-2,Bien développée,Base,Abaxiale,1,1,
+14/01/2026,14:47,1-2,Bien développée,Base,Abaxiale,1,1,te
+14/01/2026,00:15,3-4,Jeune,Base,Abaxiale,21,21,
+14/01/2026,15:03,1-2,Bien développée,Base,Abaxiale,22,22,
+14/01/2026,15:27,1-2,Bien développée,Base,Abaxiale,21,21,
