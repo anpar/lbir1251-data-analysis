@@ -9,16 +9,16 @@ from datetime import timedelta
 from scipy.ndimage import median_filter
 
 '''
-    Il faut un peu jouer avec le choix du potentiomètre qu'on étudie (variable
+    Il faut un peu jouer avec le choix de l'encodeur qu'on étudie (variable
     'col' ci-dessous) pour trouver celui qui montre les données les plus interprétables.
 
-    'pot_6' produit les plus jolis graphiques a priori.
+    'enc_6' produit les plus jolis graphiques a priori.
 '''
 
 year = 2025
-col = 'pot_6'
+col = 'enc_6'
 
-df = pd.read_csv('data/potentiometres-{year}.csv'.format(year=year), sep=';')
+df = pd.read_csv('data/croissance-{year}.csv'.format(year=year), sep=';')
 
 if year == 2025:
     df['time'] = pd.to_datetime(df['time'], format='%Y-%m-%d %H:%M:%S UTC')
@@ -30,12 +30,12 @@ else:
 
 df = df.set_index('time')
 
-# Le sens dans lequel le potentiomètre tourne n'a pas d'importance
+# Le sens dans lequel l'encodeur tourne n'a pas d'importance
 df = abs(df)
 
-# On supprime les données du 5e potentiomètres (0)
+# On supprime les données du 5e encodeur (0)
 # Aussi valable pour 2023 car les données ne ressemblent pas à grand chose
-df = df.drop(columns=['pot_5'])
+df = df.drop(columns=['enc_5'])
 
 # On lisse les données
 df = df.apply(median_filter, size=51)
@@ -48,38 +48,38 @@ df = df[days[1]:days[-1]]
 
 days = np.unique(df.index.date)
 
-# On convertit les données enregistrée par les potentiomères en longueur.
+# On convertit les données enregistrée par les encodeurs en longueur.
 # Le diamètre de la poulie est de 2.6 cm -> périmètre = \pi * 2.6 cm.
-# Les potentiomètres enregistrent chaque 1/80ème de tour de poulie.
+# Les encodeurs enregistrent chaque 1/80ème de tour de poulie.
 df *= 1/80 * (pi * 2.6)
 
 '''
-    feuilles est un dictionnaire reprenant pour chaque potentiomètre une
+    feuilles est un dictionnaire reprenant pour chaque encodeur une
     liste d'intervalles de temps correspondant à la croissance d'une seule feuille.
     Cela permet d'afficher un intervalle dans lequel la feuille mesurée n'a pas
     été changée, et qui est donc plus facile à interpréter.
 '''
 if year == 2025:
     feuilles = {
-        'pot_1': [
+        'enc_1': [
             ("2025-02-01", "2025-02-06"),
             ("2025-02-08", None)
             ],
-        'pot_2': [
+        'enc_2': [
             ("2025-01-29", "2025-02-02"),
             ("2025-02-05", "2025-02-10"),
             ("2025-02-13", None)
             ],
-        'pot_3': [
+        'enc_3': [
             ("2025-02-01", "2025-02-06"),
             ("2025-02-08", None)
             ],
-        'pot_4': [
+        'enc_4': [
             (None, "2025-02-03"),
             ("2025-02-05", "2025-02-11"),
             ("2025-02-13", None)
             ],
-        'pot_6': [
+        'enc_6': [
             (None, "2025-02-03"),
             ("2025-02-05", "2025-02-11"),
             ("2025-02-13", None)
@@ -87,20 +87,20 @@ if year == 2025:
         }
 else:
     feuilles = {
-        'pot_1': [
+        'enc_1': [
             ("2023-02-12", None)
             ],
-        'pot_2': [
+        'enc_2': [
             ("2023-02-09", "2023-02-13"),
             ("2023-02-15", None)
             ],
-        'pot_3': [
+        'enc_3': [
             ("2023-02-11", None),
             ],
-        'pot_4': [
+        'enc_4': [
             ("2023-02-16", None)
             ],
-        'pot_6': [
+        'enc_6': [
             ("2023-02-14", None)
             ]
         }
@@ -127,7 +127,7 @@ for day in days:
     
     ax.plot(df_day - min(df_day), color='blue')  
      
-ax.set_title("Croissances journalières cumulées ({pot})".format(pot=col))
+ax.set_title("Croissances journalières cumulées ({enc})".format(enc=col))
 ax.set_ylabel("[cm]")
 ax.set_xticks(days, labels=df.index.strftime('%d-%m-%Y').unique())
 ax.tick_params('x', rotation=45)
@@ -152,7 +152,7 @@ for limits in feuilles[col]:
         
         ax.plot(df_day - min(df_day), color='blue')  
          
-    ax.set_title("Croissances journalières cumulées ({pot})".format(pot=col))
+    ax.set_title("Croissances journalières cumulées ({enc})".format(enc=col))
     ax.set_ylabel("[cm]")
     ax.set_xticks(days, labels=df_f.index.strftime('%d-%m-%Y').unique())
     ax.tick_params('x', rotation=45)
@@ -197,7 +197,7 @@ for limits in feuilles[col]:
             size = 144  # En 2023 : sampling toutes les 10 minutes -> 144 samples/jour
     
         if len(norm_df_day) < size:
-            # Pad the end when the potentiometer skipped one or more beats
+            # Pad the end when the encoder skipped one or more beats
             mean_normalized += np.append(norm_df_day.to_numpy(), [100]*(size - len(norm_df_day)))
         else:
             mean_normalized += norm_df_day.to_numpy()
@@ -210,7 +210,7 @@ for limits in feuilles[col]:
             mean_normalized/len(days),
             color='blue', linewidth=3)
     
-    ax.set_title("Croissances journalières cumulées normalisées ({pot})".format(pot=col))
+    ax.set_title("Croissances journalières cumulées normalisées ({enc})".format(enc=col))
     ax.set_ylabel("%")
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
     ax.tick_params('x', rotation=45)
