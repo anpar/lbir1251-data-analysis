@@ -15,12 +15,14 @@ from scipy.ndimage import median_filter
     'enc_6' produit les plus jolis graphiques a priori.
 '''
 
-year = 2025
-col = 'enc_6'
+year = 2026
+col = 'enc_1'
 
 df = pd.read_csv('data/croissance-{year}.csv'.format(year=year), sep=';')
 
-if year == 2025:
+if year == 2026:
+    df['time'] = pd.to_datetime(df['time'], format='%d-%m-%Y %H:%M:%S')
+elif year == 2025:
     df['time'] = pd.to_datetime(df['time'], format='%Y-%m-%d %H:%M:%S UTC')
     # Conversion d'UTC vers notre fuseau horaire (+1h)
     df['time'] += pd.Timedelta('01:00:00')
@@ -44,7 +46,7 @@ days = np.unique(df.index.date)
 hours = np.unique(df.index.hour)
 
 # On ne garde que les journées complètes
-df = df[days[1]:days[-1]]
+#df = df[days[1]:days[-1]]
 
 days = np.unique(df.index.date)
 
@@ -59,7 +61,28 @@ df *= 1/80 * (pi * 2.6)
     Cela permet d'afficher un intervalle dans lequel la feuille mesurée n'a pas
     été changée, et qui est donc plus facile à interpréter.
 '''
-if year == 2025:
+if year == 2026:
+    feuilles = {
+        'enc_1': [
+            ("22-01-2026", None)
+            ],
+        'enc_2': [
+            ("22-01-2026", None)
+            ],
+        'enc_3': [
+            ("22-01-2026", None)
+            ],
+        'enc_4': [
+            ("22-01-2026", None)
+            ],
+        'enc_5': [
+            ("22-01-2026", None)
+            ],
+        'enc_6': [
+            ("22-01-2026", None)
+            ]
+        }
+elif year == 2025:
     feuilles = {
         'enc_1': [
             ("2025-02-01", "2025-02-06"),
