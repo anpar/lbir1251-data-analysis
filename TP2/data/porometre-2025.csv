@@ -1,111 +1,111 @@
-Date (jj/mm);Heure (hh:mm);Rang feuille (#);Etat feuille;Position sur le limbre (Base-milieu-pointe);Face (Abaxiale-Adaxiale);Conductance stomatique (mmol/m².s);PAR (µmol/m².s)
-11-févr;11:33;5-6;bien développée;Milieu;Abaxiale;790;120
-11-févr;15:30;5-6;bien développée;Milieu;Abaxiale;800;140
-11-févr;15:39;3-4;bien développée;Milieu;Abaxiale;370;165
-13-févr;10:00;5-6;bien développée;Milieu;Abaxiale;425;220
-13-févr;10:00;5-6;bien développée;Milieu;Abaxiale;480;214
-13-févr;15:00;5-6;bien développée;Milieu;Abaxiale;550;
-13-févr;16:00;5-6;bien développée;Milieu;Abaxiale;180;
-18-févr;15:15;7-8;bien développée;Pointe;Abaxiale;67;234
-18-févr;15:28;5-6;bien développée;Milieu;Abaxiale;65;200
-18-févr;15:40;7-8;bien développée;Milieu;Abaxiale;102;200
-18-févr;16:00;7-8;bien développée;Milieu;Abaxiale;173;195
-19-févr;17:36;7-8;bien développée;Pointe;Abaxiale;70;155
-19-févr;17:41;7-8;bien développée;Milieu;Abaxiale;124;165
-19-févr;17:50;7-8;bien développée;Base;Abaxiale;58;135
-19-févr;17:50;7-8;bien développée;Base;Abaxiale;73;140
-19-févr;17:52;7-8;bien développée;Pointe;Abaxiale;71;140
-19-févr;18:00;7-8;bien développée;Milieu;Abaxiale;103;170
-20-févr;10:00;5-6;bien développée;Milieu;Abaxiale;180;260
-20-févr;10:05;5-6;bien développée;Milieu;Abaxiale;118;180
-20-févr;10:15;5-6;bien développée;Milieu;Abaxiale;118;220
-20-févr;10:15;5-6;bien développée;Milieu;Abaxiale;109;250
-20-févr;17:10;7-8;bien développée;Milieu;Abaxiale;350;180
-20-févr;17:20;5-6;bien développée;Milieu;Abaxiale;80;190
-20-févr;17:30;9-10;bien développée;Milieu;Abaxiale;105;195
-20-févr;17:30;9-10;bien développée;Milieu;Abaxiale;83;190
-20-févr;17:40;9-10;bien développée;Milieu;Abaxiale;33;204
-20-févr;17:40;9-10;bien développée;Milieu;Abaxiale;99;195
-21-févr;13:30;9-10;bien développée;Milieu;Abaxiale;440;390
-21-févr;13:30;9-10;bien développée;Milieu;Abaxiale;450;350
-21-févr;13:30;11-12;bien développée;Milieu;Abaxiale;190;390
-11-févr;11:40;5-6;bien développée;Milieu;Adaxiale;274;
-12-févr;17:30;5-6;bien développée;Milieu;Adaxiale;220;
-12-févr;18:00;3-4;bien développée;Milieu;Adaxiale;540;
-13-févr;10:00;5-6;bien développée;Milieu;Adaxiale;36;
-13-févr;10:00;5-6;bien développée;Milieu;Adaxiale;3;
-13-févr;15:00;5-6;bien développée;Milieu;Adaxiale;9.6;
-13-févr;15:00;5-6;bien développée;Milieu;Adaxiale;130;
-13-févr;15:00;7-8;bien développée;Milieu;Adaxiale;96;
-13-févr;16:00;5-6;bien développée;Milieu;Adaxiale;30;
-18-févr;15:56;7-8;bien développée;Milieu;Adaxiale;208;
-20-févr;10:05;5-6;bien développée;Milieu;Adaxiale;9.5;
-20-févr;10:15;5-6;bien développée;Milieu;Adaxiale;10.4;
-20-févr;10:20;5-6;bien développée;Milieu;Adaxiale;15.9;
-20-févr;17:20;5-6;bien développée;Milieu;Adaxiale;6;
-20-févr;17:20;7-8;bien développée;Milieu;Adaxiale;10;
-20-févr;17:30;9-10;bien développée;Milieu;Adaxiale;8;
-20-févr;17:30;9-10;bien développée;Milieu;Adaxiale;9;
-20-févr;17:40;9-10;bien développée;Milieu;Adaxiale;6;
-21-févr;13:30;9-10;bien développée;Milieu;Adaxiale;70;
-21-févr;13:30;9-10;bien développée;Milieu;Adaxiale;140;
-21-févr;13:30;11-12;bien développée;Milieu;Adaxiale;10;
-21-févr;13:30;7-8;bien développée;Milieu;Adaxiale;7;
-11-févr;15:36;9-10;jeune;Pointe;Abaxiale;214;175
-11-févr;15:55;9-10;jeune;Milieu;Abaxiale;70;140
-11-févr;15:57;11-12;jeune;Milieu;Abaxiale;375;130
-13-févr;10:00;15-16;jeune;Milieu;Abaxiale;240;143
-13-févr;10:00;15-16;jeune;Milieu;Abaxiale;230;70
-18-févr;15:22;12-13;jeune;Pointe;Abaxiale;202;210
-20-févr;17:40;11-12;jeune;Milieu;Abaxiale;25;180
-20-févr;17:30;15-16;jeune;Milieu;Abaxiale;70;195
-20-févr;17:30;15-16;jeune;Milieu;Abaxiale;65;175
-20-févr;17:40;17-18;jeune;Milieu;Abaxiale;74;200
-21-févr;13:30;15-16;jeune;Milieu;Abaxiale;130;375
-12-févr;17:30;9-10;jeune;Milieu;Adaxiale;206;
-12-févr;17:55;9-10;jeune;Milieu;Adaxiale;360;
-12-févr;18:00;12-13;jeune;Milieu;Adaxiale;350;
-12-févr;18:09;9-10;jeune;Milieu;Adaxiale;172;
-12-févr;18:16;9-10;jeune;Milieu;Adaxiale;530;
-13-févr;10:00;15-16;jeune;Milieu;Adaxiale;22;
-13-févr;10:00;15-16;jeune;Milieu;Adaxiale;11;
-20-févr;17:40;11-12;jeune;Milieu;Adaxiale;6;
-20-févr;17:30;15-16;jeune;Milieu;Adaxiale;40;
-20-févr;17:30;15-16;jeune;Milieu;Adaxiale;43;
-20-févr;17:40;17-18;jeune;Milieu;Adaxiale;38;
-21-févr;13:30;15-16;jeune;Milieu;Adaxiale;43;
-13-févr;10:00;1-2;vieille;Milieu;Abaxiale;286;180
-13-févr;10:00;1-2;vieille;Milieu;Abaxiale;185;190
-13-févr;15:00;1-2;vieille;Milieu;Abaxiale;131;120
-13-févr;15:00;3-4;vieille;Milieu;Abaxiale;80;160
-19-févr;18:00;3-4;vieille;Base;Abaxiale;77;170
-20-févr;09:50;3-4;vieille;Milieu;Abaxiale;183;140
-20-févr;09:55;1-2;vieille;Milieu;Abaxiale;90;90
-20-févr;09:55;1-2;vieille;Milieu;Abaxiale;93;185
-20-févr;10:10;1-2;vieille;Milieu;Abaxiale;47;210
-20-févr;10:10;1-2;vieille;Milieu;Abaxiale;141;190
-20-févr;17:25;3-4;vieille;Milieu;Abaxiale;100;185
-20-févr;17:25;3-4;vieille;Milieu;Abaxiale;45;30
-20-févr;17:30;3-4;vieille;Milieu;Abaxiale;46;95
-20-févr;17:40;1-2;vieille;Milieu;Abaxiale;222;145
-20-févr;17:40;1-2;vieille;Milieu;Abaxiale;40;95
-20-févr;17:40;3-4;vieille;Milieu;Abaxiale;68;140
-20-févr;17:40;3-4;vieille;Milieu;Abaxiale;23;90
-21-févr;13:30;3-4;vieille;Milieu;Abaxiale;42;145
-21-févr;13:30;3-4;vieille;Milieu;Abaxiale;120;135
-21-févr;13:30;3-4;vieille;Milieu;Abaxiale;145;250
-21-févr;13:30;3-4;vieille;Milieu;Abaxiale;22;290
-13-févr;10:00;1-2;vieille;Milieu;Adaxiale;38;
-13-févr;10:00;1-2;vieille;Milieu;Adaxiale;18;
-13-févr;15:00;3-4;vieille;Milieu;Adaxiale;24;
-20-févr;10:15;1-2;vieille;Milieu;Adaxiale;49;
-20-févr;17:25;3-4;vieille;Milieu;Adaxiale;50;
-20-févr;17:30;3-4;vieille;Milieu;Adaxiale;9;
-20-févr;17:40;1-2;vieille;Milieu;Adaxiale;40;
-20-févr;17:40;1-2;vieille;Milieu;Adaxiale;40;
-20-févr;17:40;3-4;vieille;Milieu;Adaxiale;17;
-20-févr;17:40;3-4;vieille;Milieu;Adaxiale;30;
-21-févr;13:30;3-4;vieille;Milieu;Adaxiale;15;
-21-févr;13:30;3-4;vieille;Milieu;Adaxiale;66;
-21-févr;13:30;3-4;vieille;Milieu;Adaxiale;100;
-21-févr;13:30;3-4;vieille;Milieu;Adaxiale;18;
+date;heure;rang_f;état_f;pos_f;face_f;cond;PAR
+11-02-25;11:33;5-6;bien développée;Milieu;Abaxiale;790;120
+11-02-25;15:30;5-6;bien développée;Milieu;Abaxiale;800;140
+11-02-25;15:39;3-4;bien développée;Milieu;Abaxiale;370;165
+13-02-25;10:00;5-6;bien développée;Milieu;Abaxiale;425;220
+13-02-25;10:00;5-6;bien développée;Milieu;Abaxiale;480;214
+13-02-25;15:00;5-6;bien développée;Milieu;Abaxiale;550;
+13-02-25;16:00;5-6;bien développée;Milieu;Abaxiale;180;
+18-02-25;15:15;7-8;bien développée;Pointe;Abaxiale;67;234
+18-02-25;15:28;5-6;bien développée;Milieu;Abaxiale;65;200
+18-02-25;15:40;7-8;bien développée;Milieu;Abaxiale;102;200
+18-02-25;16:00;7-8;bien développée;Milieu;Abaxiale;173;195
+19-02-25;17:36;7-8;bien développée;Pointe;Abaxiale;70;155
+19-02-25;17:41;7-8;bien développée;Milieu;Abaxiale;124;165
+19-02-25;17:50;7-8;bien développée;Base;Abaxiale;58;135
+19-02-25;17:50;7-8;bien développée;Base;Abaxiale;73;140
+19-02-25;17:52;7-8;bien développée;Pointe;Abaxiale;71;140
+19-02-25;18:00;7-8;bien développée;Milieu;Abaxiale;103;170
+20-02-25;10:00;5-6;bien développée;Milieu;Abaxiale;180;260
+20-02-25;10:05;5-6;bien développée;Milieu;Abaxiale;118;180
+20-02-25;10:15;5-6;bien développée;Milieu;Abaxiale;118;220
+20-02-25;10:15;5-6;bien développée;Milieu;Abaxiale;109;250
+20-02-25;17:10;7-8;bien développée;Milieu;Abaxiale;350;180
+20-02-25;17:20;5-6;bien développée;Milieu;Abaxiale;80;190
+20-02-25;17:30;9-10;bien développée;Milieu;Abaxiale;105;195
+20-02-25;17:30;9-10;bien développée;Milieu;Abaxiale;83;190
+20-02-25;17:40;9-10;bien développée;Milieu;Abaxiale;33;204
+20-02-25;17:40;9-10;bien développée;Milieu;Abaxiale;99;195
+21-02-25;13:30;9-10;bien développée;Milieu;Abaxiale;440;390
+21-02-25;13:30;9-10;bien développée;Milieu;Abaxiale;450;350
+21-02-25;13:30;11-12;bien développée;Milieu;Abaxiale;190;390
+11-02-25;11:40;5-6;bien développée;Milieu;Adaxiale;274;
+12-02-25;17:30;5-6;bien développée;Milieu;Adaxiale;220;
+12-02-25;18:00;3-4;bien développée;Milieu;Adaxiale;540;
+13-02-25;10:00;5-6;bien développée;Milieu;Adaxiale;36;
+13-02-25;10:00;5-6;bien développée;Milieu;Adaxiale;3;
+13-02-25;15:00;5-6;bien développée;Milieu;Adaxiale;9.6;
+13-02-25;15:00;5-6;bien développée;Milieu;Adaxiale;130;
+13-02-25;15:00;7-8;bien développée;Milieu;Adaxiale;96;
+13-02-25;16:00;5-6;bien développée;Milieu;Adaxiale;30;
+18-02-25;15:56;7-8;bien développée;Milieu;Adaxiale;208;
+20-02-25;10:05;5-6;bien développée;Milieu;Adaxiale;9.5;
+20-02-25;10:15;5-6;bien développée;Milieu;Adaxiale;10.4;
+20-02-25;10:20;5-6;bien développée;Milieu;Adaxiale;15.9;
+20-02-25;17:20;5-6;bien développée;Milieu;Adaxiale;6;
+20-02-25;17:20;7-8;bien développée;Milieu;Adaxiale;10;
+20-02-25;17:30;9-10;bien développée;Milieu;Adaxiale;8;
+20-02-25;17:30;9-10;bien développée;Milieu;Adaxiale;9;
+20-02-25;17:40;9-10;bien développée;Milieu;Adaxiale;6;
+21-02-25;13:30;9-10;bien développée;Milieu;Adaxiale;70;
+21-02-25;13:30;9-10;bien développée;Milieu;Adaxiale;140;
+21-02-25;13:30;11-12;bien développée;Milieu;Adaxiale;10;
+21-02-25;13:30;7-8;bien développée;Milieu;Adaxiale;7;
+11-02-25;15:36;9-10;jeune;Pointe;Abaxiale;214;175
+11-02-25;15:55;9-10;jeune;Milieu;Abaxiale;70;140
+11-02-25;15:57;11-12;jeune;Milieu;Abaxiale;375;130
+13-02-25;10:00;15-16;jeune;Milieu;Abaxiale;240;143
+13-02-25;10:00;15-16;jeune;Milieu;Abaxiale;230;70
+18-02-25;15:22;12-13;jeune;Pointe;Abaxiale;202;210
+20-02-25;17:40;11-12;jeune;Milieu;Abaxiale;25;180
+20-02-25;17:30;15-16;jeune;Milieu;Abaxiale;70;195
+20-02-25;17:30;15-16;jeune;Milieu;Abaxiale;65;175
+20-02-25;17:40;17-18;jeune;Milieu;Abaxiale;74;200
+21-02-25;13:30;15-16;jeune;Milieu;Abaxiale;130;375
+12-02-25;17:30;9-10;jeune;Milieu;Adaxiale;206;
+12-02-25;17:55;9-10;jeune;Milieu;Adaxiale;360;
+12-02-25;18:00;12-13;jeune;Milieu;Adaxiale;350;
+12-02-25;18:09;9-10;jeune;Milieu;Adaxiale;172;
+12-02-25;18:16;9-10;jeune;Milieu;Adaxiale;530;
+13-02-25;10:00;15-16;jeune;Milieu;Adaxiale;22;
+13-02-25;10:00;15-16;jeune;Milieu;Adaxiale;11;
+20-02-25;17:40;11-12;jeune;Milieu;Adaxiale;6;
+20-02-25;17:30;15-16;jeune;Milieu;Adaxiale;40;
+20-02-25;17:30;15-16;jeune;Milieu;Adaxiale;43;
+20-02-25;17:40;17-18;jeune;Milieu;Adaxiale;38;
+21-02-25;13:30;15-16;jeune;Milieu;Adaxiale;43;
+13-02-25;10:00;1-2;vieille;Milieu;Abaxiale;286;180
+13-02-25;10:00;1-2;vieille;Milieu;Abaxiale;185;190
+13-02-25;15:00;1-2;vieille;Milieu;Abaxiale;131;120
+13-02-25;15:00;3-4;vieille;Milieu;Abaxiale;80;160
+19-02-25;18:00;3-4;vieille;Base;Abaxiale;77;170
+20-02-25;09:50;3-4;vieille;Milieu;Abaxiale;183;140
+20-02-25;09:55;1-2;vieille;Milieu;Abaxiale;90;90
+20-02-25;09:55;1-2;vieille;Milieu;Abaxiale;93;185
+20-02-25;10:10;1-2;vieille;Milieu;Abaxiale;47;210
+20-02-25;10:10;1-2;vieille;Milieu;Abaxiale;141;190
+20-02-25;17:25;3-4;vieille;Milieu;Abaxiale;100;185
+20-02-25;17:25;3-4;vieille;Milieu;Abaxiale;45;30
+20-02-25;17:30;3-4;vieille;Milieu;Abaxiale;46;95
+20-02-25;17:40;1-2;vieille;Milieu;Abaxiale;222;145
+20-02-25;17:40;1-2;vieille;Milieu;Abaxiale;40;95
+20-02-25;17:40;3-4;vieille;Milieu;Abaxiale;68;140
+20-02-25;17:40;3-4;vieille;Milieu;Abaxiale;23;90
+21-02-25;13:30;3-4;vieille;Milieu;Abaxiale;42;145
+21-02-25;13:30;3-4;vieille;Milieu;Abaxiale;120;135
+21-02-25;13:30;3-4;vieille;Milieu;Abaxiale;145;250
+21-02-25;13:30;3-4;vieille;Milieu;Abaxiale;22;290
+13-02-25;10:00;1-2;vieille;Milieu;Adaxiale;38;
+13-02-25;10:00;1-2;vieille;Milieu;Adaxiale;18;
+13-02-25;15:00;3-4;vieille;Milieu;Adaxiale;24;
+20-02-25;10:15;1-2;vieille;Milieu;Adaxiale;49;
+20-02-25;17:25;3-4;vieille;Milieu;Adaxiale;50;
+20-02-25;17:30;3-4;vieille;Milieu;Adaxiale;9;
+20-02-25;17:40;1-2;vieille;Milieu;Adaxiale;40;
+20-02-25;17:40;1-2;vieille;Milieu;Adaxiale;40;
+20-02-25;17:40;3-4;vieille;Milieu;Adaxiale;17;
+20-02-25;17:40;3-4;vieille;Milieu;Adaxiale;30;
+21-02-25;13:30;3-4;vieille;Milieu;Adaxiale;15;
+21-02-25;13:30;3-4;vieille;Milieu;Adaxiale;66;
+21-02-25;13:30;3-4;vieille;Milieu;Adaxiale;100;
+21-02-25;13:30;3-4;vieille;Milieu;Adaxiale;18;
