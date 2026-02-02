@@ -1,10 +1,8 @@
 import pandas as pd
 import numpy as np
 
-import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
+from utils import daily_reset, daily_normalize, plot_cols, plot_cols_separate, plot_col_daily
 
-from datetime import timedelta
 from scipy.ndimage import median_filter
 
 '''
@@ -15,241 +13,120 @@ from scipy.ndimage import median_filter
     possible d'en dire quelque chose.
 '''
 
-year = 2024
+YEAR = 2024
 
-df = pd.read_csv('data/balances-{year}.csv'.format(year=year), sep=';')
+data = pd.read_csv('data/balances-{y}.csv'.format(y=YEAR), sep=';')
 
 # Backward compatibility
-if year >= 2025:
-    df['time'] = pd.to_datetime(df['time'], unit='d', origin="1899-12-30")
+if YEAR >= 2025:
+    data['time'] = pd.to_datetime(data['time'], unit='d', origin="1899-12-30")
 else:
-    df['time'] = pd.to_datetime(df['time'], format='%d-%m-%y %H:%M')
+    data['time'] = pd.to_datetime(data['time'], format='%d-%m-%y %H:%M')
 
-df = df.set_index('time')
+# Use time as an index for the DataFrame
+data = data.set_index('time')
 
-df *= -1
+# Change the sign of scales readings (poids des pots -> g d'eau évapotranspirés)
+data *= -1
 
-# En 2024, les données des balances ont enregistré un saut inopiné le 07-02 à 16h15,
-# on corrige manuellement
-if year == 2024:
-    df.loc["2024-02-07 16:15:00":, 'plant_1'] -= (66.65 - 36.14)
-    df.loc["2024-02-07 16:15:00":, 'plant_2'] -= (57.72 - 34.46)
-    df.loc["2024-02-07 16:15:00":, 'plant_3'] -= (39.74 - 23.99)
-    df.loc["2024-02-07 16:15:00":, 'tem_1'] -= (25.62 - 13.34)
-    df.loc["2024-02-07 16:15:00":, 'tem_2'] -= (30.1 - 15.77)
-    df.loc["2024-02-07 16:15:00":, 'tem_3'] -= 0
-
-# Pour se faciliter un peu la vie par la suite
-cols_tem = ['tem_1', 'tem_2', 'tem_3']
-cols_plant = ['plant_1', 'plant_2', 'plant_3']
-cols_trans = ['trans_1', 'trans_2', 'trans_3']
+# Correction manuelle pour le saut inopiné des balances en 2024
+if YEAR == 2024:
+    data.loc["2024-02-07 16:15:00":, 'plant_1'] -= (66.65 - 36.14)
+    data.loc["2024-02-07 16:15:00":, 'plant_2'] -= (57.72 - 34.46)
+    data.loc["2024-02-07 16:15:00":, 'plant_3'] -= (39.74 - 23.99)
+    data.loc["2024-02-07 16:15:00":, 'tem_1']   -= (25.62 - 13.34)
+    data.loc["2024-02-07 16:15:00":, 'tem_2']   -= (30.1 - 15.77)
+    data.loc["2024-02-07 16:15:00":, 'tem_3']   -= 0
 
 # Calcul de l'évaporation moyenne
-df['evap'] = df[cols_tem].mean(axis=1)
+data['evap'] = data[['tem_1', 'tem_2', 'tem_3']].mean(axis=1)
+
+data = data.drop(columns=['tem_1', 'tem_2', 'tem_3'])
+
+# Affichage de l'évpotranspiration cumulée
+plot_cols(data, 
+          labels=['Plante 1', 'Plante 2', 'Plante 3', 'Moyenne pots témoins'],
+          colors=['C0', 'C1', 'C2', 'gray'],
+          linestyles=['-', '-', '-', '--'],
+          title="Evapotranspirations cumulées",
+          ylabel="[g d'eau]")
 
 # Calcul de la transpiration en soustrayant l'évaporation de l'évapotranspiration
-df[cols_trans] = df[cols_plant].sub(df['evap'], axis="rows")
+trans_cumulée = pd.DataFrame()
+trans_cumulée[['Plante 1', 'Plante 2', 'Plante 3']] = data[['plant_1', 'plant_2', 'plant_3']].sub(data['evap'], axis="rows")
 
-df = df.drop(columns=cols_tem + cols_plant)
+data = data.drop(columns=['plant_1', 'plant_2', 'plant_3'])
 
-days = np.unique(df.index.date)
-
-'''
-    Affichage des données brutes
-'''
-fig, ax = plt.subplots()
-ax.plot(df['trans_1'], label="Transpiration cumulée plante 1")
-ax.plot(df['trans_2'], label="Transpiration cumulée plante 2")
-ax.plot(df['trans_3'], label="Transpiration cumulée plante 3")
-ax.plot(df['evap'], label="Evaporation cumulée moyenne (3 pots vides)")
-ax.set_title("Transpirations et évaporation cumulées")
-ax.set_ylabel("[g d'eau]")
-ax.set_xticks(days, labels=df.index.strftime('%d-%m-%Y').unique())
-ax.tick_params('x', rotation=45)
-ax.legend()
-ax.grid(linestyle='--', alpha=0.5)
-plt.show()
+# Affichage des données brutes
+plot_cols(trans_cumulée, 
+          labels=['Plante 1', 'Plante 2', 'Plante 3'],
+          title="Transpirations cumulées",
+          ylabel="[g d'eau]")
 
 # On filtre les donnes pour réduire le bruit et supprimer les glitches
-df[cols_trans] = df[cols_trans].apply(median_filter, size=21)
+trans_cumulée = trans_cumulée.apply(median_filter, size=21)
 
-'''
-    Affichage des transpirations cumulées après filtration pour réduire
-    le bruit et les glitches
-'''
-fig, ax = plt.subplots()
-ax.plot(df['trans_1'], label="Transpiration cumulée plante 1")
-ax.plot(df['trans_2'], label="Transpiration cumulée plante 2")
-ax.plot(df['trans_3'], label="Transpiration cumulée plante 3")
-ax.set_ylabel("[g d'eau]")
-ax.set_title("Transpirations cumulées (filtrées)")
-ax.set_xticks(days, labels=df.index.strftime('%d-%m-%Y').unique())
-ax.tick_params('x', rotation=45)
-ax.legend()
-ax.grid(linestyle='--', alpha=0.5)
-plt.show()
+# Affichage des transpirations cumulées après filtration pour réduire
+# le bruit et les glitches
+plot_cols(trans_cumulée,
+          labels=['Plante 1', 'Plante 2', 'Plante 3'],
+          title="Transpirations cumulées (données filtrées)",
+          ylabel="[g d'eau]")
+
+days = np.unique(data.index.date)
 
 # On ne garde que les journées complètes
-df = df[days[1]:days[-1]]
+trans_cumulée = trans_cumulée[days[1]:days[-1]]
 
 # En 2023, les premiers jours de mesures semblent aberrants
-if year == 2023:
-    df = df[days[3]:]
+if YEAR == 2023:
+    data = data[days[3]:]
 
-days = np.unique(df.index.date)
-hours = np.unique(df.index.hour)
+days = np.unique(data.index.date)
             
-'''
-    Affichage des transpirations cumulées filtrées, en excluant le 1er et
-    dernier jour incomplets
-'''
-fig, ax = plt.subplots()
-ax.plot(df['trans_1'], label="Transpiration cumulée plante 1")
-ax.plot(df['trans_2'], label="Transpiration cumulée plante 2")
-ax.plot(df['trans_3'], label="Transpiration cumulée plante 3")
-ax.set_title("Transpiration cumulées (filtrées et coupées)")
-ax.set_ylabel("[g d'eau]")
-ax.set_xticks(days, labels=df.index.strftime('%d-%m-%Y').unique())
-ax.tick_params('x', rotation=45)
-ax.legend()
-ax.grid(linestyle='--', alpha=0.5)
-plt.show()
+# Affichage des transpirations cumulées filtrées, en excluant le 1er et
+# dernier jour incomplets
+plot_cols(trans_cumulée,
+          labels=['Plante 1', 'Plante 2', 'Plante 3'],
+          title="Transpirations cumulées (données filtrées, jours complets)",
+          ylabel="[g d'eau]")
 
-# Sélection de la plante analysée
-col = 'trans_1'
+trans_journalière = pd.DataFrame()
+trans_journalière[['Plante 1', 'Plante 2', 'Plante 3']] = trans_cumulée.apply(daily_reset)
 
-'''
-    Affichage de la transpiration journalière cumulée
-'''
-fig, ax = plt.subplots()
-for day in days:
-    df_day = df[col][day.strftime('%Y-%m-%d')]
-    
-    ax.plot(df_day - min(df_day), color='blue')  
-     
-ax.set_title("Transpirations journalières cumulées")
-ax.set_ylabel("[g d'eau]")
-ax.set_xticks(days, labels=df.index.strftime('%d-%m-%Y').unique())
-ax.tick_params('x', rotation=45)
-ax.grid(linestyle='--', alpha=0.5)
-plt.show()
+# Affichage de la transpiration journalière cumulée
+plot_cols_separate(trans_journalière, title="Transpiration journalière", ylabel="[g d'eau]")
 
-'''
-    Affichage de la transpiration journalière cumulée normalisée
-'''
-fig, ax = plt.subplots()
-for day in days:
-    df_day = df[col][day.strftime('%Y-%m-%d')]
-    
-    daily_trans = df_day - min(df_day)
-    daily_trans /= max(daily_trans)
-    daily_trans *= 100
-    
-    ax.plot(daily_trans, color='blue')  
-     
-ax.set_title("Transpirations journalières cumulées (normalisées)")
-ax.set_ylabel("%")
-ax.set_xticks(days, labels=df.index.strftime('%d-%m-%Y').unique())
-ax.tick_params('x', rotation=45)
-ax.grid(linestyle='--', alpha=0.5)
-plt.show()
+trans_journalière_norm = pd.DataFrame()
+trans_journalière_norm[['Plante 1', 'Plante 2', 'Plante 3']] = trans_journalière.apply(daily_normalize)
 
-'''
-    Calcul et affichage de la transpiration journalière cumulée normalisée, et sur 24h
-'''
-mean_daily_trans = 0
+# # Affichage de la transpiration journalière cumulée normalisée
+plot_cols_separate(trans_journalière_norm, title="Transpiration journalière (normalisée)", ylabel="[g d'eau]")
 
-fig, ax = plt.subplots()
-for i, day in enumerate(days):
-    df_day = df[col][day.strftime('%Y-%m-%d')]
-    
-    daily_trans = df_day - min(df_day)
-    daily_trans /= max(daily_trans)
-    daily_trans *= 100
-    
-    # NOTE: this is technically not correct. By using to_numpy(), I'm discarding
-    # the time index and summing vectors of data that are not perfectly aligned in
-    # time. This is sufficient here, but ideally one would need to resample each
-    # vector to given time indices before summing.
-    if len(daily_trans) < 144:
-        # This is just for that one time in 2024 where the scales skip 2 records,
-        # pad the edges with identical values
-        mean_daily_trans += np.pad(daily_trans.to_numpy(), 1, mode='edge')
-    else:
-        mean_daily_trans += daily_trans.to_numpy()
-    
-    ax.plot(df_day.index - timedelta(days=i), daily_trans,
-            color='blue', alpha=0.2)  
-     
-ax.plot(df[days[0]:days[1]].index, mean_daily_trans/len(days),
-        color='blue', linewidth=3)
+for col in trans_journalière_norm.columns.to_list():
+    plot_col_daily(trans_journalière_norm,
+                   col,
+                   10,
+                   "Dynamique de la transpiration journalière - {p})".format(p=col))
 
-ax.set_title("Transpirations journalières cumulées (normalisées)")
-ax.set_ylabel("%")
-ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
-ax.tick_params('x', rotation=45)
-ax.grid(linestyle='--', alpha=0.5)
-plt.show()
 
-'''
-    Calcul et affichage de la dérivée de la transpiration cumulée
-'''
-
-cols_der = ['der_1', 'der_2', 'der_3']
-
+trans_vitesse = pd.DataFrame()
 # Le '1/6' fait référence à l'intervalle de temps séparant les données : 10 minutes = 1/6 d'heure
 # Cela permet de donner une unité cohérente au résulat de np.gradient : des g d'eau/heure
-df[cols_der] = np.gradient(df[cols_trans], 1/6, axis=0)
+trans_vitesse[['Plante 1', 'Plante 2', 'Plante 3']] = trans_cumulée.apply(np.gradient, args=(1/6,))
+
 # On filtre car le résultat est très bruité et pratiquement illisible
-df[cols_der] = df[cols_der].apply(median_filter, size=11)
+trans_vitesse = trans_vitesse.apply(median_filter, size=11)
 
-col = 'der_1'
+# Affichage de la vitesse de transpiration
+plot_cols_separate(trans_vitesse, title="Dérivée de la transpiration cumulée", ylabel="[g d'eau/heure]")
 
-fig, ax = plt.subplots()
-ax.plot(df[col])
-ax.set_title("Dérivée de la transpiration cumulée")
-ax.set_ylabel("g d'eau/heure")
-ax.set_xticks(days, labels=df.index.strftime('%d-%m-%Y').unique())
-ax.tick_params('x', rotation=45)
-ax.grid(linestyle='--', alpha=0.5)
-plt.show()
-
-'''
-    Calcul et affichage de la dérovée de transpiration journalière cumulée normalisée, et sur 24h
-'''
-mean_daily_der = 0
-
-fig, ax = plt.subplots()
-for i, day in enumerate(days):
-    df_day = df[col][day.strftime('%Y-%m-%d')]
+trans_vitesse_norm = trans_vitesse.apply(daily_normalize)
+#plot_cols_separate(trans_vitesse_norm, title="Dérivée de la transpiration cumulée, normalisée", ylabel="%")
     
-    daily_der = df_day - min(df_day)
-    daily_der /= max(daily_der)
-    daily_der *= 100
-    
-    # NOTE: this is technically not correct. By using to_numpy(), I'm discarding
-    # the time index and summing vectors of data that are not perfectly aligned in
-    # time. This is sufficient here, but ideally one would need to resample each
-    # vector to given time indices before summing.
-    if len(daily_der) < 144:
-        # This is just for that one time in 2024 where the scales skip 2 records,
-        # pad the edges with identical values
-        mean_daily_der += np.pad(daily_der.to_numpy(), 1, mode='edge')
-    else:
-        mean_daily_der += daily_der.to_numpy()
-    
-    ax.plot(df_day.index - timedelta(days=i), daily_der,
-            color='blue', alpha=0.2)  
-     
-ax.plot(df[days[0]:days[1]].index, mean_daily_der/len(days),
-        color='blue', linewidth=3)
-
-ax.set_title("Dérivées de la transpiration journalière cumulée, normalisées")
-ax.set_ylabel("%")
-ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
-ax.tick_params('x', rotation=45)
-ax.grid(linestyle='--', alpha=0.5)
-plt.show()
-
-# On pourrait refaire les calculs sur la transpiration moyenne des 3 plants
-df['mean_trans'] = df[cols_trans].mean(axis=1)
+# Calcul et affichage de la transpiration journalière cumulée normalisée, et sur 24h
+for col in trans_vitesse_norm.columns.to_list():
+    plot_col_daily(trans_vitesse_norm,
+                   col,
+                   10,
+                   "Dynamique de la vitesse de transpiration - {p})".format(p=col))
