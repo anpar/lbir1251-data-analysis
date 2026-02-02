@@ -42,13 +42,18 @@ def daily_normalize(col):
 def plot_series(s, title, ylabel):
     fig, ax = plt.subplots(figsize=(8,4))
 
-    ax.plot(s)
+    days = np.unique(s.index.date)
+    
+    for day in days:
+        ax.plot(s[day.strftime('%Y-%m-%d')], color='blue')
     
     ax.set_title(title, pad=15)
     ax.set_ylabel(ylabel)
     
     ax.spines[["top", "right"]].set_visible(False)
 
+    print(s)
+    print(s.max())
     ax.set_ylim(bottom=0, top=s.max())
 
     ax.set_xlim(left=s.index.min(), right=s.index.max())
@@ -122,13 +127,19 @@ def plot_col_daily(df, col, sampling_period, title):
                                                                          N=N))
             print("Padding the edges.")
             
-            # This is just for that one time in 2024 where the scales skip 2 records,
-            # pad the edges with identical values
-            average += np.pad(df_day.to_numpy(), (N - len(df_day))//2, mode='edge')
+            pad_length = (N - len(df_day))
+
+            if pad_length % 2 == 0:
+                pad = (pad_length//2, pad_length//2)
+            else:
+                pad = (0, pad_length)
+            
+            average += np.pad(df_day.to_numpy(), pad, mode='edge')
         else:
             average += df_day.to_numpy()
-            
-    ax.plot(df[days[0]:days[1]].index, average/len(days),
+
+    ax.plot(pd.date_range(start=days[0], end=days[1], periods=N),
+            average/len(days),
             color='blue', linewidth=3, label="Moyenne")
     
     ax.set_title(title)

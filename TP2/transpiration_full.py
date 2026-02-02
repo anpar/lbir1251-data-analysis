@@ -100,8 +100,8 @@ plot_cols_separate(trans_journalière, title="Transpiration journalière", ylabe
 trans_journalière_norm = pd.DataFrame()
 trans_journalière_norm[['Plante 1', 'Plante 2', 'Plante 3']] = trans_journalière.apply(daily_normalize)
 
-# # Affichage de la transpiration journalière cumulée normalisée
-plot_cols_separate(trans_journalière_norm, title="Transpiration journalière (normalisée)", ylabel="[g d'eau]")
+# Affichage de la transpiration journalière cumulée normalisée
+# plot_cols_separate(trans_journalière_norm, title="Transpiration journalière (normalisée)", ylabel="[g d'eau]")
 
 for col in trans_journalière_norm.columns.to_list():
     plot_col_daily(trans_journalière_norm,

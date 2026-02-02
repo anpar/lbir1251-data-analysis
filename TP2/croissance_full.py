@@ -1,28 +1,19 @@
 import pandas as pd
 import numpy as np
 
-import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
+from utils import plot_cols, daily_reset, daily_normalize, plot_series, plot_col_daily, plot_cols_separate
 
 from math import pi
-from datetime import timedelta
+
 from scipy.ndimage import median_filter
 
-'''
-    Il faut un peu jouer avec le choix de l'encodeur qu'on étudie (variable
-    'col' ci-dessous) pour trouver celui qui montre les données les plus interprétables.
+YEAR = 2025
 
-    'enc_6' produit les plus jolis graphiques a priori.
-'''
+df = pd.read_csv('data/croissance-{y}.csv'.format(y=YEAR), sep=';')
 
-year = 2026
-col = 'enc_1'
-
-df = pd.read_csv('data/croissance-{year}.csv'.format(year=year), sep=';')
-
-if year == 2026:
+if YEAR == 2026:
     df['time'] = pd.to_datetime(df['time'], format='%d-%m-%Y %H:%M:%S')
-elif year == 2025:
+elif YEAR == 2025:
     df['time'] = pd.to_datetime(df['time'], format='%Y-%m-%d %H:%M:%S UTC')
     # Conversion d'UTC vers notre fuseau horaire (+1h)
     df['time'] += pd.Timedelta('01:00:00')
@@ -46,7 +37,7 @@ days = np.unique(df.index.date)
 hours = np.unique(df.index.hour)
 
 # On ne garde que les journées complètes
-#df = df[days[1]:days[-1]]
+df = df[days[1]:days[-1]]
 
 days = np.unique(df.index.date)
 
@@ -61,51 +52,56 @@ df *= 1/80 * (pi * 2.6)
     Cela permet d'afficher un intervalle dans lequel la feuille mesurée n'a pas
     été changée, et qui est donc plus facile à interpréter.
 '''
-if year == 2026:
+if YEAR == 2026:
     feuilles = {
+        # PLANTE 1
         'enc_1': [
-            ("22-01-2026", None)
+            ("27-01-2026", "02-02-2026 09:15", "Plante 1", "rang 3"),
+            ("02-02-2026 09:20", None, "Plante 1", "rang 5"),           
             ],
         'enc_2': [
-            ("22-01-2026", None)
+            ("27-01-2026", "28-01-2026 16:05", "Plante 1", "rang 2"),
+            ("28-01-2026 16:10", None, "Plante 1", "rang 4"),
             ],
+        # PLANTE 2
         'enc_3': [
-            ("22-01-2026", None)
+            ("27-01-2026", "28-01-2026 16:05", "Plante 2", "rang 2"),
+            ("28-01-2026 16:10", None, "Plante 2", "rang 4"),
             ],
         'enc_4': [
-            ("22-01-2026", None)
+            ("27-01-2026", "02-02-2026 09:15", "Plante 2", "rang 3"),
+            ("02-02-2026 09:20", None, "Plante 2", "rang 5"),
             ],
-        'enc_5': [
-            ("22-01-2026", None)
-            ],
+        # PLANTE 3
         'enc_6': [
-            ("22-01-2026", None)
+            ("27-01-2026", "02-02-2026 09:15", "Plante 3", "rang 3"),
+            ("02-02-2026 09:20", None, "Plante 3", "rang 5")
             ]
         }
-elif year == 2025:
+elif YEAR == 2025:
     feuilles = {
         'enc_1': [
-            ("2025-02-01", "2025-02-06"),
-            ("2025-02-08", None)
+            ("2025-02-01", "2025-02-06", "Plante 1", "rang 3"),
+            ("2025-02-08", None, "Plante 1", "rang 5")
             ],
         'enc_2': [
-            ("2025-01-29", "2025-02-02"),
-            ("2025-02-05", "2025-02-10"),
-            ("2025-02-13", None)
+            ("2025-01-29", "2025-02-02", "Plante 1", "rang 2"),
+            ("2025-02-05", "2025-02-10", "Plante 1", "rang 4"),
+            ("2025-02-13", None, "Plante 1", "rang 6")
             ],
         'enc_3': [
-            ("2025-02-01", "2025-02-06"),
-            ("2025-02-08", None)
+            ("2025-02-01", "2025-02-06",  "Plante 2", "rang 3"),
+            ("2025-02-08", None,  "Plante 2", "rang 5")
             ],
         'enc_4': [
-            (None, "2025-02-03"),
-            ("2025-02-05", "2025-02-11"),
-            ("2025-02-13", None)
+            (None, "2025-02-03",  "Plante 2", "rang 2"),
+            ("2025-02-05", "2025-02-11", "Plante 2", "rang 4"),
+            ("2025-02-13", None,  "Plante 2", "rang 6")
             ],
         'enc_6': [
-            (None, "2025-02-03"),
-            ("2025-02-05", "2025-02-11"),
-            ("2025-02-13", None)
+            (None, "2025-02-03",  "Plante 3", "rang 2"),
+            ("2025-02-05", "2025-02-11", "Plante 3", "rang 4"),
+            ("2025-02-13", None, "Plante 3", "rang 6")
             ]
         }
 else:
@@ -131,111 +127,56 @@ else:
 '''
     Affichage des données brutes
 '''
-fig, ax = plt.subplots()
-ax.plot(df, label=df.columns)
-ax.legend()
-ax.set_title("Croissance cumulée des feuilles")
-ax.set_ylabel("[cm]")
-ax.set_xticks(days, labels=df.index.strftime('%d-%m-%Y').unique())
-ax.tick_params('x', rotation=45)
-ax.grid(linestyle='--', alpha=0.5)
-plt.show()
+encs = ['enc_1', 'enc_2', 'enc_3', 'enc_4', 'enc_6']
+
+plot_cols(df,
+          labels=['Encodeur 1 (plante 1)', 'Encodeur 2 (plante 1)',
+                  'Encodeur 3 (plante 2)', 'Encodeur 4 (plante 2)',
+                  'Encodeur 6 (plante 3)'],
+          title="Elongation cumulées des feuilles",
+          ylabel="[cm]")
 
 '''
     Affichage de la croissance cumulée journalière
 '''
-fig, ax = plt.subplots()
-for day in days:
-    df_day = df[col][day.strftime('%Y-%m-%d')]
-    
-    ax.plot(df_day - min(df_day), color='blue')  
-     
-ax.set_title("Croissances journalières cumulées ({enc})".format(enc=col))
-ax.set_ylabel("[cm]")
-ax.set_xticks(days, labels=df.index.strftime('%d-%m-%Y').unique())
-ax.tick_params('x', rotation=45)
-ax.grid(linestyle='--', alpha=0.5)
-plt.show()
+croissance_journalière = pd.DataFrame()
+croissance_journalière[encs] = df[encs].apply(daily_reset)
 
-for limits in feuilles[col]:
-    start, end = limits
-    
-    if start is None:
-        df_f = df[col][:end]
-    elif end is None:
-        df_f = df[col][start:]
-    else:
-        df_f = df[col][start:end]
-           
-    days = np.unique(df_f.index.date)
+plot_cols_separate(croissance_journalière, "Croissances journalières cumulées", "[cm]")
+
+for col in encs:
+    for limits in feuilles[col]:
+        start, end, plante, rang = limits
         
-    fig, ax = plt.subplots()
-    for day in days:
-        df_day = df_f[day.strftime('%Y-%m-%d')]
+        if start is None:
+            df_f = croissance_journalière[col][:end]
+        elif end is None:
+            df_f = croissance_journalière[col][start:]
+        else:
+            df_f = croissance_journalière[col][start:end]
+
+        days = np.unique(df_f.index.date)
         
-        ax.plot(df_day - min(df_day), color='blue')  
-         
-    ax.set_title("Croissances journalières cumulées ({enc})".format(enc=col))
-    ax.set_ylabel("[cm]")
-    ax.set_xticks(days, labels=df_f.index.strftime('%d-%m-%Y').unique())
-    ax.tick_params('x', rotation=45)
-    ax.grid(linestyle='--', alpha=0.5)
-    plt.show()
+        plot_series(df_f,
+                    "Croissances cumulées journalières - {p}, {r} ({e})".format(p=plante, r=rang, e=col),
+                    "[cm]")
     
 '''
     On recommence en normalisant les courbes et en les affichant sur une période
     de 24h.
 '''
-for limits in feuilles[col]:
-    start, end = limits
-    
-    if start is None:
-        df_f = df[col][:end]
-    elif end is None:
-        df_f = df[col][start:]
-    else:
-        df_f = df[col][start:end]
-           
-    days = np.unique(df_f.index.date)
+croissance_journalière_norm = pd.DataFrame()
+croissance_journalière_norm[encs] = croissance_journalière.apply(daily_normalize)
+
+for col in encs:
+    for limits in feuilles[col]:
+        start, end, plante, rang = limits
         
-    mean_normalized = 0
-    
-    fig, ax = plt.subplots()
-    for i, day in enumerate(days):
-        df_day = df_f[day.strftime('%Y-%m-%d')]
-        
-        norm_df_day = df_day - min(df_day)
-        norm_df_day /= max(norm_df_day) 
-        norm_df_day *= 100
-        
-        # NOTE: this is technically not correct. By using to_numpy(), I'm discarding
-        # the time index and summing vectors of data that are not perfectly aligned in
-        # time. This is sufficient here, but ideally one would need to resample each
-        # vector to given time indices before summing.7
-       
-        # Backward compatibility
-        if year == 2025:
-            size = 480  # En 2025 : sampling toutes les 3 minutes -> 480 samples/jour
+        if start is None:
+            df_f = croissance_journalière_norm[:end]
+        elif end is None:
+            df_f = croissance_journalière_norm[start:]
         else:
-            size = 144  # En 2023 : sampling toutes les 10 minutes -> 144 samples/jour
-    
-        if len(norm_df_day) < size:
-            # Pad the end when the encoder skipped one or more beats
-            mean_normalized += np.append(norm_df_day.to_numpy(), [100]*(size - len(norm_df_day)))
-        else:
-            mean_normalized += norm_df_day.to_numpy()
+            df_f = croissance_journalière_norm[start:end]
         
-        ax.plot(df_day.index - timedelta(days=i), norm_df_day,
-                color='blue', alpha=0.2)  
-    
-    # See NOTE above, also applies here
-    ax.plot(pd.date_range(start=days[0], end=days[1], periods=size),
-            mean_normalized/len(days),
-            color='blue', linewidth=3)
-    
-    ax.set_title("Croissances journalières cumulées normalisées ({enc})".format(enc=col))
-    ax.set_ylabel("%")
-    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
-    ax.tick_params('x', rotation=45)
-    ax.grid(linestyle='--', alpha=0.5)
-    plt.show()
+        plot_col_daily(df_f, col, 3, "Dynamique de croissance moyenne - {p}, {r} ({e})".format(p=plante, r=rang, e=col))  
