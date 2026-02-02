@@ -107,20 +107,20 @@ elif YEAR == 2025:
 else:
     feuilles = {
         'enc_1': [
-            ("2023-02-12", None)
+            ("2023-02-12", None, "Plante 1", "rang ?")
             ],
         'enc_2': [
-            ("2023-02-09", "2023-02-13"),
-            ("2023-02-15", None)
+            ("2023-02-09", "2023-02-13", "Plante 1", "rang ?"),
+            ("2023-02-15", None, "Plante 1", "rang ?")
             ],
         'enc_3': [
-            ("2023-02-11", None),
+            ("2023-02-11", None, "Plant 2", "rang ?"),
             ],
         'enc_4': [
-            ("2023-02-16", None)
+            ("2023-02-16", None, "Plant 2", "rang ?")
             ],
         'enc_6': [
-            ("2023-02-14", None)
+            ("2023-02-14", None, "Plant 3", "rang ?")
             ]
         }
 
@@ -179,4 +179,10 @@ for col in encs:
         else:
             df_f = croissance_journalière_norm[start:end]
         
-        plot_col_daily(df_f, col, 3, "Dynamique de croissance moyenne - {p}, {r} ({e})".format(p=plante, r=rang, e=col))  
+        if YEAR == 2023:
+            sampling_period = 10
+        else:
+            sampling_period = 3
+        
+        plot_col_daily(df_f, col, sampling_period,
+                       "Dynamique de croissance moyenne - {p}, {r} ({e})".format(p=plante, r=rang, e=col))  
