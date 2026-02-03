@@ -19,7 +19,7 @@ jupyter nbconvert TP2.ipynb --TagRemovePreprocessor.remove_cell_tags="{'correcti
 jupyter nbconvert TP2.ipynb --TagRemovePreprocessor.enabled=True --TagRemovePreprocessor.remove_cell_tags="{'correction', 'A', 'B', 'C', 'hidden'}" --to notebook --output "TP2-D.ipynb"
 
 # Convert full notebook (i.e., with correction and outputs)
-jupyter nbconvert TP2.ipynb --to webpdf --output "PDF/TP2_corrections"
+jupyter nbconvert TP2.ipynb --TagRemovePreprocessor.remove_cell_tags="{'student-only'}" --to webpdf --output "PDF/TP2_corrections"
 
 # Clear outputs of notebooks
 jupyter nbconvert --to notebook --inplace --clear-output *.ipynb
