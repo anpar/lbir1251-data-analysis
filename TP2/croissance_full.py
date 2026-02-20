@@ -7,7 +7,7 @@ from math import pi
 
 from scipy.ndimage import median_filter
 
-YEAR = 2025
+YEAR = 2026
 
 df = pd.read_csv('data/croissance-{y}.csv'.format(y=YEAR), sep=';')
 
@@ -23,28 +23,65 @@ else:
 
 df = df.set_index('time')
 
-# Le sens dans lequel l'encodeur tourne n'a pas d'importance
-df = abs(df)
-
 # On supprime les données du 5e encodeur (0)
 # Aussi valable pour 2023 car les données ne ressemblent pas à grand chose
 df = df.drop(columns=['enc_5'])
 
-# On lisse les données
-df = df.apply(median_filter, size=51)
+df.plot()
 
-days = np.unique(df.index.date)
-hours = np.unique(df.index.hour)
+if YEAR == 2026:
+    # abs() en dessous ne fonctionne bien que si les données des encodeurs
+    # sont tout le temps +ve ou tout le temps -ve, en remettant des poids, on
+    # a fait un bugué un encodeur de ce point de vue là. On corrige pour tout
+    # laisser en -ve
+    df.loc["2026-02-06 16:42:08":, 'enc_1'] -= 100
 
-# On ne garde que les journées complètes
-df = df[days[1]:days[-1]]
-
-days = np.unique(df.index.date)
+# Le sens dans lequel l'encodeur tourne n'a pas d'importance
+df = abs(df)
 
 # On convertit les données enregistrée par les encodeurs en longueur.
 # Le diamètre de la poulie est de 2.6 cm -> périmètre = \pi * 2.6 cm.
 # Les encodeurs enregistrent chaque 1/80ème de tour de poulie.
 df *= 1/80 * (pi * 2.6)
+
+plot_cols(df,
+          labels=['Encodeur 1 (plante 1)', 'Encodeur 2 (plante 1)',
+                  'Encodeur 3 (plante 2)', 'Encodeur 4 (plante 2)',
+                  'Encodeur 6 (plante 3)'],
+          title="Elongation cumulées des feuilles (données brutes)",
+          ylabel="[cm]")
+
+if YEAR == 2026:
+    # L'encodeur 2 sample patiner à partir de 2026-02-03 01:00:04 alors qu'il
+    # suivait assez fidèlement l'encodeur 3 (légèrement au-dessus de lui).
+    # D'ailleurs, on voit qu'après le saut causé par la pince qui lâche
+    df.loc["2026-02-03 01:00:04":"2026-02-04 09:34:06", 'enc_2'] = df.loc["2026-02-03 01:00:04":"2026-02-04 09:34:06", 'enc_3'] - 1
+    
+    # On corrige le saut de la poulie causée par la pince qui lâche
+    df.loc["2026-02-04 09:35:06":, 'enc_2'] += 45.4563 - 7.04502
+    
+    df.loc["2026-02-06 16:42:08":, 'enc_2'] += 52.3992 - 48.8257
+
+plot_cols(df,
+          labels=['Encodeur 1 (plante 1)', 'Encodeur 2 (plante 1)',
+                  'Encodeur 3 (plante 2)', 'Encodeur 4 (plante 2)',
+                  'Encodeur 6 (plante 3)'],
+          title="Elongation cumulées des feuilles (données corrigées)",
+          ylabel="[cm]")
+
+# On lisse les données
+df = df.apply(median_filter, size=51)
+
+plot_cols(df,
+          labels=['Encodeur 1 (plante 1)', 'Encodeur 2 (plante 1)',
+                  'Encodeur 3 (plante 2)', 'Encodeur 4 (plante 2)',
+                  'Encodeur 6 (plante 3)'],
+          title="Elongation cumulées des feuilles (données filtrées)",
+          ylabel="[cm]")
+
+# On ne garde que les journées complètes
+days = np.unique(df.index.date)
+df = df[days[1]:days[-1]]
 
 '''
     feuilles est un dictionnaire reprenant pour chaque encodeur une
@@ -55,27 +92,36 @@ df *= 1/80 * (pi * 2.6)
 if YEAR == 2026:
     feuilles = {
         # PLANTE 1
+        # NOTE: on ne garde que les journées complètes, les vraies dates de changement
+        # sont indiquées en commentaire à droite
         'enc_1': [
-            ("27-01-2026", "02-02-2026 09:15", "Plante 1", "rang 3"),
-            ("02-02-2026 09:20", None, "Plante 1", "rang 5"),           
+            # La poulie a patiné le 01-02, on ne garde que jusqu'au 31-01
+            ("2026-01-28", "2026-01-31", "Plante 1", "rang 3"), # 02-02-2026 09:15
+            ("2026-02-03", "2026-02-05", "Plante 1", "rang 5"),
+            # Bizarrerie le 07/02, on commence au 08
+            ("2026-02-07", "2026-02-12", "Plante 1", "rang 6") 
             ],
         'enc_2': [
-            ("27-01-2026", "28-01-2026 16:05", "Plante 1", "rang 2"),
-            ("28-01-2026 16:10", None, "Plante 1", "rang 4"),
+            #("2026-01-27", "2026-01-28 16:05", "Plante 1", "rang 2"),
+            ("2026-01-29", "2026-02-07", "Plante 1", "rang 4"), # 2026-01-28 16:10
+            #("2026-02-14", None, "Plante 2", "rang 7")
             ],
         # PLANTE 2
         'enc_3': [
-            ("27-01-2026", "28-01-2026 16:05", "Plante 2", "rang 2"),
-            ("28-01-2026 16:10", None, "Plante 2", "rang 4"),
+            #("2026-01-27", "2026-01-28 16:05", "Plante 2", "rang 2"),
+            # Bug le 05-02, on ne garde que jusqu'au 04-02
+            ("2026-01-29", "2026-02-04", "Plante 2", "rang 4"), # 2026-01-28 16:10
+            ("2026-02-07", "2026-02-12", "Plante 2", "rang 6")
             ],
         'enc_4': [
-            ("27-01-2026", "02-02-2026 09:15", "Plante 2", "rang 3"),
-            ("02-02-2026 09:20", None, "Plante 2", "rang 5"),
+            ("2026-01-27", "2026-02-01", "Plante 2", "rang 3"), # 2026-02-02 09:15
+            ("2026-02-03", "2026-02-12", "Plante 2", "rang 5"), # 2026-02-02 09:20
             ],
         # PLANTE 3
         'enc_6': [
-            ("27-01-2026", "02-02-2026 09:15", "Plante 3", "rang 3"),
-            ("02-02-2026 09:20", None, "Plante 3", "rang 5")
+            # bug le 01-02, on ne garde que jusqu'au 31-01
+            ("2026-01-27", "2026-01-31", "Plante 3", "rang 3"), # 2026-02-02 09:15
+            ("2026-02-03", "2026-02-12", "Plante 3", "rang 5") # 2026-02-02 09:20
             ]
         }
 elif YEAR == 2025:
@@ -133,7 +179,7 @@ plot_cols(df,
           labels=['Encodeur 1 (plante 1)', 'Encodeur 2 (plante 1)',
                   'Encodeur 3 (plante 2)', 'Encodeur 4 (plante 2)',
                   'Encodeur 6 (plante 3)'],
-          title="Elongation cumulées des feuilles",
+          title="Elongation cumulées des feuilles (journées complètes)",
           ylabel="[cm]")
 
 '''
@@ -154,8 +200,6 @@ for col in encs:
             df_f = croissance_journalière[col][start:]
         else:
             df_f = croissance_journalière[col][start:end]
-
-        days = np.unique(df_f.index.date)
         
         plot_series(df_f,
                     "Croissances cumulées journalières - {p}, {r} ({e})".format(p=plante, r=rang, e=col),
@@ -179,7 +223,9 @@ for col in encs:
         else:
             df_f = croissance_journalière_norm[start:end]
         
-        if YEAR == 2023:
+        if YEAR == 2026:
+            sampling_period = 1
+        elif YEAR == 2023:
             sampling_period = 10
         else:
             sampling_period = 3

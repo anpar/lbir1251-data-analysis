@@ -18,7 +18,7 @@ YEAR = 2024
 data = pd.read_csv('data/balances-{y}.csv'.format(y=YEAR), sep=';')
 
 # Backward compatibility
-if YEAR >= 2025:
+if YEAR == 2025:
     data['time'] = pd.to_datetime(data['time'], unit='d', origin="1899-12-30")
 else:
     data['time'] = pd.to_datetime(data['time'], format='%d-%m-%y %H:%M')
@@ -37,6 +37,27 @@ if YEAR == 2024:
     data.loc["2024-02-07 16:15:00":, 'tem_1']   -= (25.62 - 13.34)
     data.loc["2024-02-07 16:15:00":, 'tem_2']   -= (30.1 - 15.77)
     data.loc["2024-02-07 16:15:00":, 'tem_3']   -= 0
+# Correction des arrosages
+elif YEAR == 2026:
+    data.loc["2026-02-06 16:55:00", "plant_1"] = 360
+    data.loc["2026-02-06 16:45:00", "plant_2"] = 365
+    data.loc["2026-02-06 16:55:00":, "plant_3"] += (386.89 - 349.08)
+    
+    data.loc["2026-02-06 17:15:00":, "tem_1"] += (308.71 - 260.9)
+    data.loc["2026-02-06 17:05:00":, "tem_2"] += (272.97 - 226.07)
+    data.loc["2026-02-06 16:55:00":, "tem_3"] += (287.43 - 240.39)
+    
+    data.loc["2026-02-12 10:25:00":, "tem_1"] += (378.77 - 329.81)
+    data.loc["2026-02-12 10:05:00":, "tem_2"] += (315.67 - 264.84)
+    data.loc["2026-02-12 10:05:00":, "tem_3"] += (342.41 - 293.37)
+    data.loc["2026-02-12 10:15:00":, "plant_1"] += (538.84 - 490.42)
+    data.loc["2026-02-12 10:05:00":, "plant_2"] += (551.78 - 500.97)
+    data.loc["2026-02-12 10:15:00":, "plant_3"] += (524.44 - 470.64)
+    
+plot_cols(data, 
+          title="Données brutes",
+          ylabel="[g d'eau]",
+          bottom=None)
 
 # Calcul de l'évaporation moyenne
 data['evap'] = data[['tem_1', 'tem_2', 'tem_3']].mean(axis=1)
@@ -62,6 +83,9 @@ plot_cols(trans_cumulée,
           labels=['Plante 1', 'Plante 2', 'Plante 3'],
           title="Transpirations cumulées",
           ylabel="[g d'eau]")
+
+data['evap'].plot()
+trans_cumulée.plot()
 
 # On filtre les donnes pour réduire le bruit et supprimer les glitches
 trans_cumulée = trans_cumulée.apply(median_filter, size=21)
@@ -90,6 +114,14 @@ plot_cols(trans_cumulée,
           labels=['Plante 1', 'Plante 2', 'Plante 3'],
           title="Transpirations cumulées (données filtrées, jours complets)",
           ylabel="[g d'eau]")
+
+# Juste deux jours et pour deux plantes pour zoomer sur la dynamique
+# plot_cols(trans_cumulée[['Plante 1', 'Plante 2']]["2024-02-10":"2024-02-11"],
+#           labels=['Plante 1', 'Plante 2'],
+#           title="Transpirations cumulées le 10 et 11 février",
+#           ylabel="[g d'eau]",
+#           bottom=40)
+
 
 trans_journalière = pd.DataFrame()
 trans_journalière[['Plante 1', 'Plante 2', 'Plante 3']] = trans_cumulée.apply(daily_reset)

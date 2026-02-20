@@ -71,8 +71,11 @@ def plot_cols_separate(df, title, ylabel):
                     title="{t} - {c}".format(t=title, c=col),
                     ylabel=ylabel)
 
-def plot_cols(df, labels, title, ylabel, colors=None, linestyles=None):
+def plot_cols(df, title, ylabel, labels=None, colors=None, linestyles=None, bottom=0):
     cols = df.columns.tolist()
+    
+    if labels is None:
+        labels = cols
     
     if colors is None:
         colors = ['C' + str(i) for i in range(len(cols))]
@@ -93,12 +96,12 @@ def plot_cols(df, labels, title, ylabel, colors=None, linestyles=None):
     
     ax.spines[["top", "right"]].set_visible(False)
 
-    ax.set_ylim(bottom=0, top=df.to_numpy().max())
+    ax.set_ylim(bottom=bottom, top=df.to_numpy().max())
 
     ax.set_xlim(left=df.index.min(), right=df.index.max())
     ax.set_xticks(np.unique(df.index.date), labels=df.index.strftime('%d-%m').unique())
 
-    ax.tick_params(axis='both', which='major', labelsize=9)
+    ax.tick_params(axis='both', which='major', labelsize=6)
 
     if labels[0] is not None:
         ax.legend(bbox_to_anchor=(1.02, 0.5), loc='center left', fontsize=10, frameon=False)
@@ -138,7 +141,7 @@ def plot_col_daily(df, col, sampling_period, title):
         else:
             average += df_day.to_numpy()
 
-    ax.plot(pd.date_range(start=days[0], end=days[1], periods=N),
+    ax.plot(pd.date_range(start=days[0], end=days[0] + timedelta(days=1), periods=N),
             average/len(days),
             color='blue', linewidth=3, label="Moyenne")
     
